@@ -1,20 +1,8 @@
-import Component from './cores/Component';
+import { Items } from './components';
 
-export default class App extends Component {
-  initState() {
-    this.$state = { items: ['item1', 'item2'] };
-  }
-
-  makeTemplate() {
-    const { items } = this.$state;
-    return `<ul>
-    ${items
-      .map(item => {
-        return `<li>${item}</li>`;
-      })
-      .join('')}
-    </ul>
-    <button>추가</button>
-    `;
+export default class App {
+  constructor() {
+    const $app = document.querySelector('#app');
+    new Items($app);
   }
 }
