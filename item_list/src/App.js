@@ -1,10 +1,10 @@
-import { Items, ItemAppender } from './components';
+import { Items, ItemAppender, ItemFilter } from './components';
 import { Component } from './cores';
 
 export default class App extends Component {
   initState() {
     this.$state = {
-      isFilter: 0,
+      filterMode: 0,
       items: [
         { itemId: 1, contents: 'item1', active: false },
         { itemId: 2, contents: 'item2', active: true },
@@ -21,16 +21,19 @@ export default class App extends Component {
   }
 
   mounted() {
-    const { addItem, changeStatusOfItem, deleteItem } = this;
+    const { addItem, changeStatusOfItem, deleteItem, filterItem } = this;
     const $itemAppender = this.$target.querySelector('#appender-container');
     const $items = this.$target.querySelector('#items-container');
+    const $itemFilter = this.$target.querySelector('#filter-container');
 
     new ItemAppender($itemAppender, { addItem: addItem.bind(this) });
     new Items($items, {
       items: this.$state.items,
+      filterMode: this.$state.filterMode,
       changeStatusOfItem: changeStatusOfItem.bind(this),
       deleteItem: deleteItem.bind(this),
     });
+    new ItemFilter($itemFilter, { filterItem: filterItem.bind(this) });
   }
 
   addItem(contents) {
@@ -59,5 +62,9 @@ export default class App extends Component {
     items[targetIndex].active = !items[targetIndex].active;
 
     this.setState({ items });
+  }
+
+  filterItem(filterMode) {
+    this.setState({ filterMode });
   }
 }

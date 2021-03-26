@@ -2,11 +2,16 @@ import { Component } from '../../cores';
 
 export default class Items extends Component {
   makeTemplate() {
-    const { items } = this.$props;
+    const { items, filterMode } = this.$props;
     return `<ul>
     ${items
       .map(item => {
-        return `<li data-itemId='${item.itemId}'>${item.contents}
+        if (
+          filterMode === 0 ||
+          (filterMode === 1 && item.active === true) ||
+          (filterMode === 2 && item.active === false)
+        ) {
+          return `<li data-itemId='${item.itemId}'>${item.contents}
         ${
           item.active
             ? `<button data-action='changeStatusOfItem'>활성</button>`
@@ -14,6 +19,7 @@ export default class Items extends Component {
         }
         <button data-action='deleteItem'>삭제</button>
         </li>`;
+        }
       })
       .join('')}
     </ul>
