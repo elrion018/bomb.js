@@ -6,8 +6,8 @@ export default class App extends Component {
     this.$state = {
       isFilter: 0,
       items: [
-        { seq: 1, contents: 'item1', active: false },
-        { seq: 2, contents: 'item2', active: true },
+        { itemId: 1, contents: 'item1', active: false },
+        { itemId: 2, contents: 'item2', active: true },
       ],
     };
   }
@@ -21,30 +21,42 @@ export default class App extends Component {
   }
 
   mounted() {
-    const { addItem } = this;
+    const { addItem, changeStatusOfItem, deleteItem } = this;
     const $itemAppender = this.$target.querySelector('#appender-container');
     const $items = this.$target.querySelector('#items-container');
 
     new ItemAppender($itemAppender, { addItem: addItem.bind(this) });
-    new Items($items, this.$state);
+    new Items($items, {
+      items: this.$state.items,
+      changeStatusOfItem: changeStatusOfItem.bind(this),
+      deleteItem: deleteItem.bind(this),
+    });
   }
 
   addItem(contents) {
     const { items } = this.$state;
-    const seq = Math.max(0, ...items.map(item => item.seq)) + 1;
+    const itemId = Math.max(0, ...items.map(item => item.itemId)) + 1;
     const active = false;
 
     this.setState({
-      items: [...items, { seq, contents, active }],
+      items: [...items, { itemId, contents, active }],
     });
   }
 
-  deleteItem(seq) {
+  deleteItem(itemId) {
     const items = [...this.$state.items];
-    items.splice(
-      items.findIndex(item => item.seq),
-      1
-    );
+
+    const targetIndex = items.findIndex(item => item.itemId === itemId);
+    items.splice(targetIndex, 1);
+
+    this.setState({ items });
+  }
+
+  changeStatusOfItem(itemId) {
+    const items = [...this.$state.items];
+
+    const targetIndex = items.findIndex(item => item.itemId === itemId);
+    items[targetIndex].active = !items[targetIndex].active;
 
     this.setState({ items });
   }
