@@ -2,13 +2,20 @@ export default class Component {
   $target;
   $props;
   $state;
+  store;
 
-  constructor($target, $props) {
+  constructor($target, $props, store) {
     this.$target = $target;
     this.$props = $props;
+    this.store = store;
+
     this.initState();
     this.setEvent();
     this.render();
+  }
+
+  observe(callback) {
+    this.store.subscribe(this, callback);
   }
 
   initState() {}
@@ -21,6 +28,7 @@ export default class Component {
 
   render() {
     this.$target.innerHTML = this.makeTemplate();
+
     this.mounted();
   }
 

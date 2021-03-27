@@ -2,8 +2,10 @@ export default class Reducer {
   types;
 
   constructor() {
-    this.types = {};
+    this.initTypes();
   }
+
+  initTypes() {}
 
   setState(state = {}, { type, payload }) {
     if (type in this.types) {

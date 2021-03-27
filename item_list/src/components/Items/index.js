@@ -1,8 +1,16 @@
 import { Component } from '../../cores';
 
 export default class Items extends Component {
+  initState() {
+    if (this.store) {
+      this.observe(this.setState.bind(this));
+      this.$state = { ...this.store.state };
+    }
+  }
+
   makeTemplate() {
-    const { items, filterMode } = this.$props;
+    console.log('...rerendering', 'items');
+    const { items, filterMode } = this.$state;
     return `<ul>
     ${items
       .map(item => {
@@ -27,8 +35,6 @@ export default class Items extends Component {
   }
 
   setEvent() {
-    const { changeStatusOfItem, deleteItem } = this.$props;
-
     this.$target.addEventListener('click', event => {
       const { dataset } = event.target;
       const { parentNode } = event.target;
@@ -36,13 +42,17 @@ export default class Items extends Component {
       if (dataset.action === 'deleteItem') {
         const itemId = parseInt(parentNode.dataset.itemid);
 
-        deleteItem(itemId);
+        this.store.dispatch(
+          this.store.createAction(dataset.action, { itemId })
+        );
       }
 
       if (dataset.action === 'changeStatusOfItem') {
         const itemId = parseInt(parentNode.dataset.itemid);
 
-        changeStatusOfItem(itemId);
+        this.store.dispatch(
+          this.store.createAction(dataset.action, { itemId })
+        );
       }
     });
   }
