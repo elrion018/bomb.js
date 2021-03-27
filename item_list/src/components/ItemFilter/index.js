@@ -3,7 +3,7 @@ import { Component } from '../../cores';
 export default class ItemFilter extends Component {
   initState() {
     if (this.store) {
-      this.$state = { ...this.store.state };
+      this.state = { ...this.store.state };
     }
   }
   makeTemplate() {
@@ -14,14 +14,14 @@ export default class ItemFilter extends Component {
   }
 
   setEvent() {
-    this.$target.addEventListener('click', event => {
+    this.target.addEventListener('click', event => {
       const { dataset } = event.target;
 
       if (dataset.action === 'filterItem') {
         const filterMode = parseInt(dataset.filtermode);
 
         this.store.dispatch(
-          this.store.createAction(dataset.action, { filterMode })
+          this.store.createAction('FILTER_ITEM', { filterMode })
         );
       }
     });

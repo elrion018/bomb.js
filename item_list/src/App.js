@@ -12,9 +12,9 @@ export default class App extends Component {
   }
 
   mounted() {
-    const $itemAppender = this.$target.querySelector('#appender-container');
-    const $items = this.$target.querySelector('#items-container');
-    const $itemFilter = this.$target.querySelector('#filter-container');
+    const $itemAppender = this.target.querySelector('#appender-container');
+    const $items = this.target.querySelector('#items-container');
+    const $itemFilter = this.target.querySelector('#filter-container');
 
     new ItemAppender($itemAppender, null, this.store);
     new Items($items, null, this.store);

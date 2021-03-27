@@ -4,13 +4,13 @@ export default class Items extends Component {
   initState() {
     if (this.store) {
       this.observe(this.setState.bind(this));
-      this.$state = { ...this.store.state };
+      this.state = { ...this.store.state };
     }
   }
 
   makeTemplate() {
     console.log('...rerendering', 'items');
-    const { items, filterMode } = this.$state;
+    const { items, filterMode } = this.state;
     return `<ul>
     ${items
       .map(item => {
@@ -35,23 +35,21 @@ export default class Items extends Component {
   }
 
   setEvent() {
-    this.$target.addEventListener('click', event => {
+    this.target.addEventListener('click', event => {
       const { dataset } = event.target;
       const { parentNode } = event.target;
 
       if (dataset.action === 'deleteItem') {
         const itemId = parseInt(parentNode.dataset.itemid);
 
-        this.store.dispatch(
-          this.store.createAction(dataset.action, { itemId })
-        );
+        this.store.dispatch(this.store.createAction('DELETE_ITEM', { itemId }));
       }
 
       if (dataset.action === 'changeStatusOfItem') {
         const itemId = parseInt(parentNode.dataset.itemid);
 
         this.store.dispatch(
-          this.store.createAction(dataset.action, { itemId })
+          this.store.createAction('CHANGE_STATUS_OF_ITEM', { itemId })
         );
       }
     });

@@ -3,10 +3,10 @@ import { Reducer } from '../../cores';
 export default class ItemReducer extends Reducer {
   initTypes() {
     this.types = {
-      addItem: this.addItemReducerFunction,
-      deleteItem: this.deleteItemReducerFunction,
-      changeStatusOfItem: this.changeStatusOfItemReducerFunction,
-      filterItem: this.filterItemReducerFunction,
+      ADD_ITEM: this.addItemReducerFunction,
+      DELETE_ITEM: this.deleteItemReducerFunction,
+      CHANGE_STATUS_OF_ITEM: this.changeStatusOfItemReducerFunction,
+      FILTER_ITEM: this.filterItemReducerFunction,
     };
   }
 

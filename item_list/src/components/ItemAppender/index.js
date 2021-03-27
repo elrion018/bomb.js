@@ -3,7 +3,7 @@ import { Component } from '../../cores';
 export default class ItemAppender extends Component {
   initState() {
     if (this.store) {
-      this.$state = this.store.state;
+      this.state = this.store.state;
     }
   }
 
@@ -13,14 +13,12 @@ export default class ItemAppender extends Component {
   }
 
   setEvent() {
-    this.$target.addEventListener('keyup', event => {
+    this.target.addEventListener('keyup', event => {
       const { dataset } = event.target;
       const contents = event.target.value;
 
       if (dataset.action === 'addItem' && event.key === 'Enter') {
-        this.store.dispatch(
-          this.store.createAction(dataset.action, { contents })
-        );
+        this.store.dispatch(this.store.createAction('ADD_ITEM', { contents }));
       }
     });
   }
