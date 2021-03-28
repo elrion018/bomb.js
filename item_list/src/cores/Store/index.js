@@ -6,6 +6,7 @@ export default class Store {
   constructor(reducer) {
     this.reducer = reducer;
     this.subscribers = [];
+
     this.initState();
   }
 

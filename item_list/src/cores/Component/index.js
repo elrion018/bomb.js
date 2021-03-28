@@ -3,11 +3,13 @@ export default class Component {
   props;
   state;
   store;
+  router;
 
-  constructor(target, props, store) {
+  constructor(target, props, store, router) {
     this.target = target;
     this.props = props;
     this.store = store;
+    this.router = router;
 
     this.initState();
     this.setEvent();
@@ -28,7 +30,7 @@ export default class Component {
 
   render() {
     this.target.innerHTML = this.makeTemplate();
-
+    console.log(document.querySelector('#app'));
     this.mounted();
   }
 
