@@ -2,6 +2,7 @@ export default class Store {
   state;
   reducer;
   subscribers;
+  middlewares;
 
   constructor(reducer) {
     this.reducer = reducer;
@@ -11,6 +12,18 @@ export default class Store {
   }
 
   initState() {}
+
+  applyMiddlewares(middlewares) {
+    this.middlewares = middlewares;
+    this.middlewares.reverse();
+
+    let dispatch = this.dispatch.bind(this);
+    middlewares.forEach(middleware => {
+      dispatch = middleware(this)(dispatch);
+    });
+
+    this.dispatch = dispatch;
+  }
 
   subscribe(subscriber, callback = null) {
     this.subscribers.push({

@@ -3,6 +3,7 @@ import { Component } from '../../cores';
 export default class ItemTopNavigator extends Component {
   makeTemplate() {
     return `
+      <button data-page='home'>home</button>
       <button data-page='itemManager'>itemManager</button>
       <button data-page='itemAbout'>itemAbout</button>
     `;
