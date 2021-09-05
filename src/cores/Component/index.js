@@ -22,7 +22,7 @@ export default class Component {
 
   // store의 변화를 관찰하는 메소드
   observe(callback) {
-    this.store.subscribe(this, callback);
+    this.store.register(this, callback);
   }
 
   // state를 초기화하는 메소드
