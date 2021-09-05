@@ -5,6 +5,7 @@ export default class Store {
   middlewares;
 
   constructor(reducer) {
+    this.state = {};
     this.reducer = reducer;
     this.subscribers = [];
 
@@ -43,7 +44,7 @@ export default class Store {
   }
 
   dispatch(action) {
-    this.state = this.reducer.setState(this.state, action);
+    this.state = this.reducer.reduce(this.state, action);
     this.publish();
   }
 

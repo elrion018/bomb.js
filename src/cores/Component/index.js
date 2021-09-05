@@ -1,5 +1,5 @@
 /**
- * 컴포넌트 core. state 변경에 반응하여 render 한다.
+ * 컴포넌트 코어. state 변경에 반응하여 render 한다.
  */
 export default class Component {
   target;
