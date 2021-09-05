@@ -17,17 +17,23 @@ export default class Store {
 
   initState() {}
 
-  //필요한 미들웨어를 등록할 수 있는 메서드. 커링을 활용한다.
+  //필요한 미들웨어를 등록할 수 있는 메서드.
   applyMiddlewares(middlewares) {
     this.middlewares = middlewares;
     this.middlewares.reverse();
-    let dispatch = this.dispatch.bind(this);
+
+    // Store 코어의 dispatch를 넣어준다.
+    // 최종 미들웨어 내에서 next를 실행하면 dispatch가 실행된다.
+    // 이 next 변수는 계속 바뀔 예정
+    let next = this.dispatch.bind(this);
 
     middlewares.forEach(middleware => {
-      dispatch = middleware(this)(dispatch);
+      // 미들웨어들을 순회하며 next를 미들웨어로 래핑하여 담고 그 next를 또 다른 미들웨어로 래핑하는 작업을 반복한다.
+      next = middleware(this)(next);
     });
 
-    this.dispatch = dispatch;
+    // dispatch를 실행하면 첫 번째 미들웨어부터 거칠 수 있도록 덮어 씌우고 외부에 노출.
+    this.dispatch = next;
   }
 
   // 자신을 구독하는 컴포넌트들을 subscribers 배열에 콜백과 함께 추가하는 메소드.
