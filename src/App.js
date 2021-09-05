@@ -19,6 +19,11 @@ export default class App extends Component {
       '#top-navigator-container'
     );
 
+    const mainContainer = this.target.querySelector('#main-container');
+
+    this.router.setTarget(mainContainer);
+    this.router.replaceState('itemManager');
+
     new ItemTopNavigator(itemTopNavigator, null, null, this.router);
   }
 }
