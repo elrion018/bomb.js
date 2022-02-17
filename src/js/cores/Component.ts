@@ -1,18 +1,37 @@
-export default class Component {
-  props;
-  state = {};
-  store;
-  listenerInfos;
-  targetSelector;
-  targetElement;
-  components;
-  componentInstances;
+import { Store } from "./";
 
-  constructor(targetSelector, store, props) {
+interface Constructor {
+  new (targetSelector: string, store: Store, props: object | null): Component;
+}
+
+interface ComponentSpec {
+  constructor: Constructor;
+  targetSelector: string;
+  props: object | null;
+}
+
+interface ListenerSpec {
+  eventTarget: HTMLElement;
+  eventType: string;
+  listener: EventListener;
+}
+
+export class Component {
+  props: object | null;
+  state: object;
+  store: Store;
+  listenerInfos: ListenerSpec[];
+  targetSelector: string;
+  targetElement: HTMLElement | null;
+  components: ComponentSpec[];
+  componentInstances: Component[];
+
+  constructor(targetSelector: string, store: Store, props: object | null) {
+    this.props = props;
+    this.state = {};
     this.components = [];
     this.componentInstances = [];
     this.listenerInfos = [];
-    this.props = props;
     this.store = store;
     this.targetSelector = targetSelector;
     this.targetElement = document.querySelector(targetSelector);
@@ -33,6 +52,8 @@ export default class Component {
   // state를 초기화하는 메소드
   initState() {
     // console.log("initState");
+    if (this.store === null) return;
+
     this.state = this.store.getState();
   }
 
@@ -40,7 +61,7 @@ export default class Component {
   observeStore() {}
 
   // state에 변화를 주는 메소드
-  setState(state) {
+  setState(this: Component, state: object) {
     try {
       // state parameter 는 object만 허용
       if (state.constructor !== Object)
@@ -48,23 +69,22 @@ export default class Component {
 
       // 이벤트 큐의 뒤로 밀어버리기 위해 사용
 
-      setTimeout(
-        function () {
-          // 불변성 유지
-          this.state = { ...this.state, ...state };
+      setTimeout(() => {
+        // 불변성 유지
+        this.state = { ...this.state, ...state };
 
-          this.beforeUpdated();
-          // state 변경 후 업데이트 반영
-          this.updated();
-        }.bind(this),
-        0
-      );
+        this.beforeUpdated();
+        // state 변경 후 업데이트 반영
+        this.updated();
+      }, 0);
     } catch (error) {
       console.error(error);
     }
   }
 
-  setProps(props) {
+  setProps(props: object | null) {
+    if (props === null) return;
+
     this.props = props;
   }
 
@@ -78,9 +98,11 @@ export default class Component {
 
   // event targets에 이벤트 리스너들을 달기위한 메소드
   setEventListeners() {
-    this.listenerInfos.forEach(({ eventTarget, eventType, listener }) => {
-      eventTarget.addEventListener(eventType, listener);
-    });
+    this.listenerInfos.forEach(
+      ({ eventTarget, eventType, listener }: ListenerSpec) => {
+        eventTarget.addEventListener(eventType, listener);
+      }
+    );
   }
 
   getState() {
@@ -96,6 +118,8 @@ export default class Component {
 
   // 맨 처음 컨텐츠를 렌더링하거나 state 변화 이후 컨텐츠를 재렌더링하는 메소드
   render() {
+    if (this.targetElement === null) return;
+
     this.targetElement.innerHTML = this.makeTemplate();
 
     this.initListenerInfos();
@@ -138,12 +162,15 @@ export default class Component {
 
     // props를 새롭게 갱신하고 인스턴스들에 update를 유발한다.
     if (!this.componentInstances.length) return;
+
     this.componentInstances.forEach((componentInstance) => {
-      const { props: newProps } = this.components.find((component) => {
+      const component = this.components.find((component) => {
         return componentInstance.constructor === component.constructor;
       });
 
-      componentInstance.setProps(newProps);
+      if (!component) return;
+
+      componentInstance.setProps(component.props);
       componentInstance.updated();
     });
   }

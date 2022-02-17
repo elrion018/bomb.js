@@ -1,4 +1,4 @@
-export default class Store {
+export class Store {
   prevState = {};
   state = {};
   subscribers = [];

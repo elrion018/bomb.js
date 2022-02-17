@@ -1,4 +1,4 @@
-import Component from "./cores/Component";
+import { Component } from "./cores";
 import Home from "./pages/Home";
 
 export default class App extends Component {

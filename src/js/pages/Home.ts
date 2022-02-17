@@ -1,4 +1,4 @@
-import Component from "../cores/Component.js";
+import { Component } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput.js";
 import MenuList from "../components/MenuList.js";
 
