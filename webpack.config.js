@@ -1,32 +1,32 @@
 module.exports = {
-  entry: ['./src/index.js'],
+  entry: ["./src/js/index.js"],
   output: {
-    path: __dirname + '/dist',
-    filename: 'bundle.js',
+    path: __dirname + "/dist",
+    filename: "bundle.js",
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
         options: {
           presets: [
             [
-              '@babel/preset-env',
+              "@babel/preset-env",
               {
                 targets: {
-                  ie: '10',
+                  ie: "10",
                 },
                 modules: false,
-                useBuiltIns: 'entry',
+                useBuiltIns: "entry",
               },
             ],
           ],
         },
-        exclude: ['/node_modules'],
+        exclude: ["/node_modules"],
       },
     ],
   },
-  target: ['es5', 'web'],
-  mode: 'development',
+  target: ["es5", "web"],
+  mode: "development",
 };
