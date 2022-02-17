@@ -1,4 +1,4 @@
-import Reducer from "../../cores/Reducer.js";
+import { Reducer } from "../../cores/Reducer";
 
 const ADD_MENU = "addMenu";
 const EDIT_MENU = "editMenu";
@@ -8,7 +8,7 @@ export default class EspressoMenuReducer extends Reducer {
   constructor() {
     super();
 
-    this.setActionTypes({
+    this.setActions({
       [ADD_MENU]: function (state, payload) {
         const { newMenu } = payload;
 
