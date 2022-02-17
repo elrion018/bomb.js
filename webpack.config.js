@@ -14,10 +14,6 @@ module.exports = {
             [
               "@babel/preset-env",
               {
-                targets: {
-                  ie: "10",
-                },
-                modules: false,
                 useBuiltIns: "entry",
               },
             ],
@@ -27,6 +23,5 @@ module.exports = {
       },
     ],
   },
-  target: ["es5", "web"],
   mode: "development",
 };
