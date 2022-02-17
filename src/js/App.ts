@@ -1,5 +1,5 @@
-import Component from "./cores/Component.js";
-import Home from "./pages/Home.js";
+import Component from "./cores/Component";
+import Home from "./pages/Home";
 
 export default class App extends Component {
   makeTemplate() {

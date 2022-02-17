@@ -1,5 +1,5 @@
 module.exports = {
-  entry: ["./src/js/index.js"],
+  entry: ["./src/js/index.ts"],
   output: {
     path: __dirname + "/dist",
     filename: "bundle.js",
@@ -7,21 +7,14 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: "babel-loader",
-        options: {
-          presets: [
-            [
-              "@babel/preset-env",
-              {
-                useBuiltIns: "entry",
-              },
-            ],
-          ],
-        },
+        test: /\.ts$/,
+        use: "ts-loader",
         exclude: ["/node_modules"],
       },
     ],
+  },
+  resolve: {
+    extensions: [".ts", ".js"],
   },
   mode: "development",
 };
