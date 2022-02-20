@@ -1,4 +1,4 @@
-import Component from "../cores/Component.js";
+import { Component } from "../cores";
 
 export default class MenuListInput extends Component {
   makeTemplate() {

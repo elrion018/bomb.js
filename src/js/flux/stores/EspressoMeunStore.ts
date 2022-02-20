@@ -1,13 +1,19 @@
 import { Store, Reducer } from "../../cores";
 
-export default class EspressoMenuStore extends Store {
+export interface EspressoMenuStoreState {
+  menu: any[];
+  menuId: number;
+}
+
+export class EspressoMenuStore extends Store {
+  state: EspressoMenuStoreState;
+
   constructor(reducer: Reducer) {
     super(reducer);
 
-    this.setState({
+    this.state = {
       menu: [],
       menuId: 0,
-      test: "",
-    });
+    };
   }
 }

@@ -1,10 +1,20 @@
 import { Component } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
+import { EspressoMenuStore, EspressoMenuStoreState } from "../flux/stores";
+
+interface HomeState extends EspressoMenuStoreState {}
 
 export default class Home extends Component {
-  constructor() {
-    super();
+  state: HomeState;
+
+  constructor(
+    targetSelector: string,
+    store: EspressoMenuStore,
+    props: object | null
+  ) {
+    super(targetSelector, store, props);
+    this.state = store.state;
   }
 
   makeTemplate() {
@@ -92,11 +102,11 @@ export default class Home extends Component {
     this.store.registerSubscriber(this, ["menu", "menuId"]);
   }
 
-  addMenu(newMenu) {
+  addMenu(newMenu: string) {
     if (newMenu.trim() === "") {
       alert("빈 값은 추가할 수 없습니다.");
 
-      return false;
+      return;
     }
 
     this.store.dispatch({
@@ -107,7 +117,7 @@ export default class Home extends Component {
     });
   }
 
-  removeMenu(key) {
+  removeMenu(key: string) {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
     const targetMenuIndex = this.state.menu.findIndex(
@@ -122,10 +132,11 @@ export default class Home extends Component {
     });
   }
 
-  editMenu(key) {
+  editMenu(key: string) {
     const newName = prompt("메뉴명을 수정하세요.");
 
-    if (newName.trim() === "") return alert("빈 값으로 수정할 수 없습니다.");
+    if (newName !== null && newName.trim() === "")
+      return alert("빈 값으로 수정할 수 없습니다.");
 
     const targetMenuIndex = this.state.menu.findIndex(
       (item) => item.id === Number(key)

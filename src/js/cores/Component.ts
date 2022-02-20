@@ -18,8 +18,8 @@ interface ListenerSpec {
 
 export class Component {
   props: object | null;
-  state: object;
   store: Store;
+  state: object;
   listenerInfos: ListenerSpec[];
   targetSelector: string;
   targetElement: HTMLElement | null;
@@ -28,7 +28,7 @@ export class Component {
 
   constructor(targetSelector: string, store: Store, props: object | null) {
     this.props = props;
-    this.state = {};
+    this.state = store.state;
     this.components = [];
     this.componentInstances = [];
     this.listenerInfos = [];
