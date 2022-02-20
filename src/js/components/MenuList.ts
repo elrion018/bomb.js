@@ -1,7 +1,8 @@
-import { Component } from "../cores/Component";
+import { Component } from "../cores";
+import { EspressoMenuStore } from "../flux/stores";
 
 interface Props {
-  menu: string;
+  menu: any[];
   removeMenu: Function;
   editMenu: Function;
 }
@@ -9,9 +10,10 @@ interface Props {
 export default class MenuList extends Component {
   props: Props;
 
-  constructor() {
-    super();
-    this.props = {};
+  constructor(targetSelector: string, store: EspressoMenuStore, props: Props) {
+    super(targetSelector, store, props);
+
+    this.props = props;
   }
 
   makeTemplate() {
@@ -35,8 +37,6 @@ export default class MenuList extends Component {
   }
 
   getMenuListItems() {
-    if (this.props === null) return;
-
     const { menu } = this.props;
 
     return menu.map(
@@ -45,9 +45,14 @@ export default class MenuList extends Component {
     );
   }
 
-  itemButtonClickListener(event) {
+  itemButtonClickListener(event: Event) {
+    if (!(event.target instanceof HTMLButtonElement)) return;
+
     const { parentNode, dataset } = event.target;
     const { purpose } = dataset;
+
+    if (!(parentNode instanceof HTMLElement)) return;
+
     const { key } = parentNode.dataset;
 
     // 동적으로 개선 예정
