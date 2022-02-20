@@ -96,7 +96,7 @@ export default class Home extends Component {
     }
 
     this.store.dispatch({
-      actionType: "addMenu",
+      type: "addMenu",
       payload: {
         newMenu,
       },
@@ -111,7 +111,7 @@ export default class Home extends Component {
     );
 
     this.store.dispatch({
-      actionType: "removeMenu",
+      type: "removeMenu",
       payload: {
         targetMenuIndex,
       },
@@ -128,7 +128,7 @@ export default class Home extends Component {
     );
 
     this.store.dispatch({
-      actionType: "editMenu",
+      type: "editMenu",
       payload: {
         targetMenuIndex,
         newName,
