@@ -1,8 +1,12 @@
 import { Component } from "../cores/Component";
-import MenuListInput from "../components/MenuListInput.js";
-import MenuList from "../components/MenuList.js";
+import MenuListInput from "../components/MenuListInput";
+import MenuList from "../components/MenuList";
 
 export default class Home extends Component {
+  constructor() {
+    super();
+  }
+
   makeTemplate() {
     return `<div class="d-flex justify-center mt-5 w-100">
     <div class="w-100">

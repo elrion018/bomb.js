@@ -1,7 +1,7 @@
-import Store from "../../cores/Store.js";
+import { Store, Reducer } from "../../cores";
 
 export default class EspressoMenuStore extends Store {
-  constructor(reducer) {
+  constructor(reducer: Reducer) {
     super(reducer);
 
     this.setState({

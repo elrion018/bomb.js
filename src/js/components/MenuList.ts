@@ -1,6 +1,19 @@
-import Component from "../cores/Component.js";
+import { Component } from "../cores/Component";
+
+interface Props {
+  menu: string;
+  removeMenu: Function;
+  editMenu: Function;
+}
 
 export default class MenuList extends Component {
+  props: Props;
+
+  constructor() {
+    super();
+    this.props = {};
+  }
+
   makeTemplate() {
     return `<ul id="espresso-menu-list" class="mt-3 pl-0">
       ${this.getMenuListItems().join("")}
@@ -11,7 +24,10 @@ export default class MenuList extends Component {
   initListenerInfos() {
     this.listenerInfos = [
       {
-        eventTarget: this.targetElement.querySelector("#espresso-menu-list"),
+        eventTarget:
+          this.targetElement !== null
+            ? this.targetElement.querySelector("#espresso-menu-list")
+            : null,
         eventType: "click",
         listener: this.itemButtonClickListener.bind(this),
       },
@@ -19,6 +35,8 @@ export default class MenuList extends Component {
   }
 
   getMenuListItems() {
+    if (this.props === null) return;
+
     const { menu } = this.props;
 
     return menu.map(

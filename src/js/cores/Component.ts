@@ -11,7 +11,7 @@ interface ComponentSpec {
 }
 
 interface ListenerSpec {
-  eventTarget: HTMLElement;
+  eventTarget: HTMLElement | null;
   eventType: string;
   listener: EventListener;
 }
@@ -100,7 +100,8 @@ export class Component {
   setEventListeners() {
     this.listenerInfos.forEach(
       ({ eventTarget, eventType, listener }: ListenerSpec) => {
-        eventTarget.addEventListener(eventType, listener);
+        if (eventTarget !== null)
+          eventTarget.addEventListener(eventType, listener);
       }
     );
   }
@@ -112,7 +113,8 @@ export class Component {
   // event targets에 이벤트 리스너들을 제거하기 위한 메소드
   clearEventListeners() {
     this.listenerInfos.forEach(({ eventTarget, eventType, listener }) => {
-      eventTarget.removeEventListener(eventType, listener);
+      if (eventTarget !== null)
+        eventTarget.removeEventListener(eventType, listener);
     });
   }
 
