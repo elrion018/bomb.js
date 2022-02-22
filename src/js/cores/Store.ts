@@ -10,9 +10,13 @@ interface Action {
   payload: any;
 }
 
+export interface StoreState {
+  [key: string]: any | any[];
+}
+
 export class Store {
   prevState: object;
-  state: object;
+  state: StoreState;
   subscribers: SubscriberSpec[];
   reducer: Reducer;
 

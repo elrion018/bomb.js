@@ -1,5 +1,7 @@
+import { StoreState } from "./Store";
+
 interface Actions {
-  [action: string]: (state: object, payload: object) => object;
+  [action: string]: (state: StoreState, payload: any) => StoreState;
 }
 
 interface Action {
