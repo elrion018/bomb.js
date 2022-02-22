@@ -1,16 +1,20 @@
 import { Component } from "../cores";
 import { EspressoMenuStore } from "../flux/stores";
 
-interface Props {
+interface MenuListProps {
   menu: any[];
   removeMenu: Function;
   editMenu: Function;
 }
 
 export default class MenuList extends Component {
-  props: Props;
+  props: MenuListProps;
 
-  constructor(targetSelector: string, store: EspressoMenuStore, props: Props) {
+  constructor(
+    targetSelector: string,
+    store: EspressoMenuStore,
+    props: MenuListProps
+  ) {
     super(targetSelector, store, props);
 
     this.props = props;

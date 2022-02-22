@@ -1,6 +1,25 @@
 import { Component } from "../cores";
+import { EspressoMenuStore } from "../flux/stores";
+
+interface MenuListInputProps {
+  addMenu: (newMenu: string) => void;
+}
 
 export default class MenuListInput extends Component {
+  props: MenuListInputProps;
+  state = {
+    inputValue: "",
+  };
+
+  constructor(
+    targetSelector: string,
+    store: EspressoMenuStore,
+    props: MenuListInputProps
+  ) {
+    super(targetSelector, store, props);
+    this.props = props;
+  }
+
   makeTemplate() {
     return `<form id="espresso-menu-form">
     <div class="d-flex w-100">
@@ -28,61 +47,61 @@ export default class MenuListInput extends Component {
   </form>`;
   }
 
-  initState() {
-    this.state = {
-      inputValue: "",
-    };
-  }
-
   initListenerInfos() {
     super.initListenerInfos();
 
     this.listenerInfos = [
       {
-        eventTarget: this.targetElement.querySelector("#espresso-menu-form"),
+        eventTarget:
+          this.targetElement !== null
+            ? this.targetElement.querySelector("#espresso-menu-form")
+            : null,
         eventType: "submit",
         listener: this.formSubmitListener.bind(this),
       },
       {
-        eventTarget: this.targetElement.querySelector(
-          "#espresso-menu-submit-button"
-        ),
+        eventTarget:
+          this.targetElement !== null
+            ? this.targetElement.querySelector("#espresso-menu-submit-button")
+            : null,
         eventType: "click",
         listener: this.submitButtonClickListener.bind(this),
       },
       {
-        eventTarget: this.targetElement.querySelector("#espresso-menu-name"),
+        eventTarget:
+          this.targetElement !== null
+            ? this.targetElement.querySelector("#espresso-menu-name")
+            : null,
         eventType: "change",
         listener: this.inputValueChangeListener.bind(this),
       },
     ];
   }
 
-  inputValueChangeListener(event) {
+  inputValueChangeListener(event: Event) {
     // console.log("inputValueChangeListener");
+
+    if (!(event.target instanceof HTMLInputElement)) return;
 
     this.setState({
       inputValue: event.target.value,
     });
   }
 
-  formSubmitListener(event) {
+  formSubmitListener(this: MenuListInput, event: Event) {
     event.preventDefault();
     // console.log("formSubmitListener");
 
     /**
      * @todo form submit을 위한 비동기 메소드 하나 만들 것.
      */
-    setTimeout(
-      function () {
-        this.props.addMenu(this.state.inputValue);
+    setTimeout(() => {
+      this.props.addMenu(this.state.inputValue);
 
-        this.setState({
-          inputValue: "",
-        });
-      }.bind(this),
-      0
-    );
+      this.setState({
+        inputValue: "",
+      });
+    }, 0);
   }
 
   submitButtonClickListener() {}
