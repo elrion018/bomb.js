@@ -1,13 +1,7 @@
 import { Store } from "./";
 
-interface Constructor {
-  new (targetSelector: string, store: Store, props: object | null): Component;
-}
-
-interface ComponentSpec {
-  constructor: Constructor;
-  targetSelector: string;
-  props: object | null;
+export interface ComponentProps {
+  [key: string]: any;
 }
 
 interface ListenerSpec {
@@ -16,23 +10,33 @@ interface ListenerSpec {
   listener: EventListener;
 }
 
+export interface ComponentSpec<T extends typeof Component> {
+  constructor: T;
+  targetSelector: string;
+  props: ComponentProps;
+}
+
 export class Component {
-  props: object | null;
+  props: ComponentProps | null;
   store: Store;
   state: object;
   listenerInfos: ListenerSpec[];
   targetSelector: string;
   targetElement: HTMLElement | null;
-  components: ComponentSpec[];
+  componentSpecs: ComponentSpec<typeof Component>[];
   componentInstances: Component[];
 
-  constructor(targetSelector: string, store: Store, props: object | null) {
+  constructor(
+    targetSelector: string,
+    store: Store,
+    props: ComponentProps | null
+  ) {
     this.props = props;
+    this.store = store;
     this.state = store.state;
-    this.components = [];
+    this.componentSpecs = [];
     this.componentInstances = [];
     this.listenerInfos = [];
-    this.store = store;
     this.targetSelector = targetSelector;
     this.targetElement = document.querySelector(targetSelector);
 
@@ -55,6 +59,14 @@ export class Component {
     if (this.store === null) return;
 
     this.state = this.store.getState();
+  }
+
+  initComponentInstances() {
+    this.componentInstances = this.componentSpecs.map((componentSpec) => {
+      const { constructor, targetSelector, props } = componentSpec;
+
+      return new constructor(targetSelector, this.store, props);
+    });
   }
 
   // store를 구독하는 메소드
@@ -86,14 +98,6 @@ export class Component {
     if (props === null) return;
 
     this.props = props;
-  }
-
-  setComponentInstances() {
-    this.componentInstances = this.components.map((component) => {
-      let { constructor: Constructor, targetSelector, props } = component;
-
-      return new Constructor(targetSelector, this.store, props);
-    });
   }
 
   // event targets에 이벤트 리스너들을 달기위한 메소드
@@ -133,9 +137,9 @@ export class Component {
 
     this.observeStore();
     this.initState();
-    this.initComponents();
+    this.initComponentInstances();
     this.render();
-    this.setComponentInstances();
+    // this.setComponentInstances();
   }
 
   // 기초적인 beforeMounted 라이프사이클
@@ -160,14 +164,14 @@ export class Component {
     this.targetElement = document.querySelector(this.targetSelector);
     this.render();
     this.setEventListeners();
-    this.initComponents();
+    this.initComponentInstances();
 
     // props를 새롭게 갱신하고 인스턴스들에 update를 유발한다.
     if (!this.componentInstances.length) return;
 
     this.componentInstances.forEach((componentInstance) => {
-      const component = this.components.find((component) => {
-        return componentInstance.constructor === component.constructor;
+      const component = this.componentSpecs.find((componentSpec) => {
+        return componentInstance.constructor === componentSpec.constructor;
       });
 
       if (!component) return;

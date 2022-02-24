@@ -11,11 +11,11 @@ interface Action {
 }
 
 export interface StoreState {
-  [key: string]: any | any[];
+  [key: string]: any;
 }
 
 export class Store {
-  prevState: object;
+  prevState: StoreState;
   state: StoreState;
   subscribers: SubscriberSpec[];
   reducer: Reducer;

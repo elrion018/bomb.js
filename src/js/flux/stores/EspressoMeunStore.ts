@@ -5,8 +5,13 @@ const ADD_MENU = "addMenu";
 const EDIT_MENU = "editMenu";
 const REMOVE_MENU = "removeMenu";
 
+export interface EspressoMenuStoreState extends StoreState {
+  menu: any[];
+  menuId: number;
+}
+
 export class EspressoMenuStore extends Store {
-  state: StoreState;
+  state: EspressoMenuStoreState;
 
   constructor(reducer: Reducer) {
     super(reducer);
@@ -16,9 +21,9 @@ export class EspressoMenuStore extends Store {
       menuId: 0,
     };
 
-    this.reducer.setActions({
+    this.reducer.setActionTypes<EspressoMenuStoreState>({
       [ADD_MENU]: function (
-        state: StoreState,
+        state: EspressoMenuStoreState,
         payload: {
           newMenu: string;
         }
@@ -32,7 +37,7 @@ export class EspressoMenuStore extends Store {
         };
       },
 
-      [EDIT_MENU]: function (state: StoreState, payload) {
+      [EDIT_MENU]: function (state: EspressoMenuStoreState, payload) {
         const { targetMenuIndex, newName } = payload;
         const copiedMenu = [...state.menu];
         copiedMenu[targetMenuIndex].name = newName.toLowerCase();
@@ -43,7 +48,7 @@ export class EspressoMenuStore extends Store {
         };
       },
 
-      [REMOVE_MENU]: function (state: StoreState, payload) {
+      [REMOVE_MENU]: function (state: EspressoMenuStoreState, payload) {
         const { targetMenuIndex } = payload;
         const copiedMenu = [...state.menu];
 

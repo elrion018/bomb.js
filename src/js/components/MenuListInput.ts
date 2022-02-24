@@ -2,6 +2,7 @@ import { Component } from "../cores";
 import { EspressoMenuStore } from "../flux/stores";
 
 interface MenuListInputProps {
+  menu: any[];
   addMenu: (newMenu: string) => void;
 }
 

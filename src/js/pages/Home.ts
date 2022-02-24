@@ -1,4 +1,4 @@
-import { Component } from "../cores/Component";
+import { Component, ComponentProps, ComponentSpec } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
 import { EspressoMenuStore, EspressoMenuStoreState } from "../flux/stores";
@@ -7,14 +7,16 @@ interface HomeState extends EspressoMenuStoreState {}
 
 export default class Home extends Component {
   state: HomeState;
+  store: EspressoMenuStore;
 
   constructor(
     targetSelector: string,
     store: EspressoMenuStore,
-    props: object | null
+    props: ComponentProps
   ) {
     super(targetSelector, store, props);
-    this.state = store.state;
+    this.store = store;
+    this.state = this.store.state;
   }
 
   makeTemplate() {
@@ -77,25 +79,17 @@ export default class Home extends Component {
   }
 
   initComponents() {
-    this.components = [
-      {
-        constructor: MenuList,
-        targetSelector: "#espresso-menu-list-wrapper",
-        props: {
-          menu: this.state.menu,
-          removeMenu: this.removeMenu.bind(this),
-          editMenu: this.editMenu.bind(this),
-        },
+    const menuListSpec = {
+      constructor: MenuList,
+      props: {
+        menu: this.state.menu,
+        removeMenu: this.removeMenu.bind(this),
+        editMenu: this.editMenu.bind(this),
       },
-      {
-        constructor: MenuListInput,
-        targetSelector: "#espresso-menu-form-wrapper",
-        props: {
-          menu: this.state.menu,
-          addMenu: this.addMenu.bind(this),
-        },
-      },
-    ];
+      targetSelector: "#espresso-menu-list-wrapper",
+    };
+
+    this.componentSpecs = [menuListSpec];
   }
 
   observeStore() {
