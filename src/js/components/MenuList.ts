@@ -1,5 +1,4 @@
 import { Component, Props } from "../cores";
-import { EspressoMenuStore } from "../flux/stores";
 import { Menu } from "../pages/Home";
 
 interface MenuListProps extends Props {
@@ -11,11 +10,7 @@ interface MenuListProps extends Props {
 export default class MenuList extends Component {
   declare props: MenuListProps;
 
-  constructor(
-    targetSelector: string,
-    store: EspressoMenuStore,
-    props: MenuListProps
-  ) {
+  constructor(targetSelector: string, store: null, props: MenuListProps) {
     super(targetSelector, store, props);
   }
 
@@ -26,8 +21,8 @@ export default class MenuList extends Component {
     </ul>`;
   }
 
-  initListenerInfos() {
-    this.listenerInfos = [
+  initEventListenerSpecs() {
+    this.eventListenerSpecs = [
       {
         eventTarget:
           this.targetElement !== null

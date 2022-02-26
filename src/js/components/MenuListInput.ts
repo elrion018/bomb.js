@@ -1,21 +1,21 @@
-import { Component } from "../cores";
-import { EspressoMenuStore } from "../flux/stores";
+import { Component, Props, State } from "../cores";
+import { Menu } from "../pages/Home";
 
-interface MenuListInputProps {
-  menu: any[];
+interface MenuListInputProps extends Props {
+  menu: Menu[];
   addMenu: (newMenu: string) => void;
 }
 
-export default class MenuListInput extends Component {
-  props: MenuListInputProps;
+interface MenuListInputState extends State {
+  inputValue: string;
+}
 
-  constructor(
-    targetSelector: string,
-    store: EspressoMenuStore,
-    props: MenuListInputProps
-  ) {
+export default class MenuListInput extends Component {
+  declare state: MenuListInputState;
+  declare props: MenuListInputProps;
+
+  constructor(targetSelector: string, store: null, props: MenuListInputProps) {
     super(targetSelector, store, props);
-    this.props = props;
   }
 
   makeTemplate() {
@@ -51,10 +51,10 @@ export default class MenuListInput extends Component {
     };
   }
 
-  initListenerInfos() {
-    super.initListenerInfos();
+  initEventListenerSpecs() {
+    super.initEventListenerSpecs();
 
-    this.listenerInfos = [
+    this.eventListenerSpecs = [
       {
         eventTarget:
           this.targetElement !== null
@@ -83,18 +83,16 @@ export default class MenuListInput extends Component {
   }
 
   inputValueChangeListener(event: Event) {
-    // console.log("inputValueChangeListener");
-
     if (!(event.target instanceof HTMLInputElement)) return;
 
     this.setState({
+      ...this.state,
       inputValue: event.target.value,
     });
   }
 
   formSubmitListener(this: MenuListInput, event: Event) {
     event.preventDefault();
-    // console.log("formSubmitListener");
 
     /**
      * @todo form submit을 위한 비동기 메소드 하나 만들 것.
