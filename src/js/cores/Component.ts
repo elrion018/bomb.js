@@ -33,7 +33,6 @@ export class Component {
   constructor(targetSelector: string, store: Store, props: Props | null) {
     this.props = props;
     this.store = store;
-    this.state = store.getState();
     this.componentInstances = [];
     this.listenerInfos = [];
     this.targetSelector = targetSelector;
@@ -72,7 +71,7 @@ export class Component {
   observeStore() {}
 
   // state에 변화를 주는 메소드
-  setState(this: Component, state: State) {
+  setState<T extends State>(this: Component, state: T) {
     try {
       // state parameter 는 object만 허용
       if (state.constructor !== Object)
@@ -83,8 +82,6 @@ export class Component {
       setTimeout(() => {
         // 불변성 유지
         this.state = { ...this.state, ...state };
-
-        console.log(this.state, "setState");
 
         this.beforeUpdated();
         // state 변경 후 업데이트 반영
@@ -176,7 +173,6 @@ export class Component {
 
       if (!componentSpec) return;
 
-      console.log(componentSpec.props, "component props");
       componentInstance.setProps(componentSpec.props);
       componentInstance.updated();
     });

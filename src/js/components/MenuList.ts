@@ -1,14 +1,15 @@
-import { Component } from "../cores";
+import { Component, Props } from "../cores";
 import { EspressoMenuStore } from "../flux/stores";
+import { Menu } from "../pages/Home";
 
-interface MenuListProps {
-  menu: any[];
-  removeMenu: Function;
-  editMenu: Function;
+interface MenuListProps extends Props {
+  menu: Menu[];
+  removeMenu: (key: string) => void;
+  editMenu: (key: string) => void;
 }
 
 export default class MenuList extends Component {
-  props: MenuListProps;
+  declare props: MenuListProps;
 
   constructor(
     targetSelector: string,
@@ -16,9 +17,6 @@ export default class MenuList extends Component {
     props: MenuListProps
   ) {
     super(targetSelector, store, props);
-    this.state = store.state;
-
-    this.props = props;
   }
 
   makeTemplate() {
@@ -42,7 +40,6 @@ export default class MenuList extends Component {
   }
 
   getMenuListItems() {
-    console.log(this.props, "props");
     const { menu } = this.props;
 
     return menu.map(
@@ -62,11 +59,11 @@ export default class MenuList extends Component {
     const { key } = parentNode.dataset;
 
     // 동적으로 개선 예정
-    if (purpose === "delete") {
+    if (purpose === "delete" && key) {
       this.props.removeMenu(key);
     }
 
-    if (purpose === "edit") {
+    if (purpose === "edit" && key) {
       this.props.editMenu(key);
     }
   }

@@ -1,14 +1,22 @@
-import { Component, Props } from "../cores/Component";
+import { Component, Props, State } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
-import { EspressoMenuStore, EspressoMenuStoreState } from "../flux/stores";
+import { EspressoMenuStore } from "../flux/stores";
 
-interface HomeState extends EspressoMenuStoreState {}
+export interface Menu {
+  name: string;
+  id: number;
+}
+
+interface HomeState extends State {
+  menu: Menu[];
+  menuId: number;
+}
 
 interface HomeProps extends Props {}
 
 export class Home extends Component {
-  state: HomeState;
+  declare state: HomeState;
   store: EspressoMenuStore;
 
   constructor(
@@ -18,7 +26,6 @@ export class Home extends Component {
   ) {
     super(targetSelector, store, props);
     this.store = store;
-    this.state = this.store.state;
   }
 
   makeTemplate() {
@@ -80,6 +87,13 @@ export class Home extends Component {
   </div>`;
   }
 
+  initState() {
+    this.state = {
+      menu: [],
+      menuId: 1,
+    };
+  }
+
   initComponentSpecs() {
     this.componentSpecs = [
       {
@@ -103,10 +117,6 @@ export class Home extends Component {
     ];
   }
 
-  observeStore() {
-    this.store.registerSubscriber(this, ["menu", "menuId"]);
-  }
-
   addMenu(newMenu: string) {
     if (newMenu.trim() === "") {
       alert("빈 값은 추가할 수 없습니다.");
@@ -114,11 +124,10 @@ export class Home extends Component {
       return;
     }
 
-    this.store.dispatch({
-      type: "addMenu",
-      payload: {
-        newMenu,
-      },
+    this.setState<HomeState>({
+      ...this.state,
+      menu: this.state.menu.concat({ name: newMenu, id: this.state.menuId }),
+      menuId: this.state.menuId + 1,
     });
   }
 
@@ -129,30 +138,35 @@ export class Home extends Component {
       (item) => item.id === Number(key)
     );
 
-    this.store.dispatch({
-      type: "removeMenu",
-      payload: {
-        targetMenuIndex,
-      },
+    const copiedMenu = [...this.state.menu];
+
+    copiedMenu.splice(targetMenuIndex, 1);
+
+    this.setState<HomeState>({
+      ...this.state,
+      menu: copiedMenu,
     });
   }
 
   editMenu(key: string) {
-    const newName = prompt("메뉴명을 수정하세요.");
-
-    if (newName !== null && newName.trim() === "")
-      return alert("빈 값으로 수정할 수 없습니다.");
-
     const targetMenuIndex = this.state.menu.findIndex(
       (item) => item.id === Number(key)
     );
 
-    this.store.dispatch({
-      type: "editMenu",
-      payload: {
-        targetMenuIndex,
-        newName,
-      },
+    if (targetMenuIndex === -1) return;
+
+    const newName = prompt("메뉴명을 수정하세요.");
+
+    if (newName === null || newName.trim() === "")
+      return alert("빈 값으로 수정할 수 없습니다.");
+
+    const copiedMenu = [...this.state.menu];
+
+    copiedMenu[targetMenuIndex].name = newName.toLocaleLowerCase();
+
+    this.setState<HomeState>({
+      ...this.state,
+      menu: copiedMenu,
     });
   }
 }
