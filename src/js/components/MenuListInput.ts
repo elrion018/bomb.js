@@ -8,9 +8,6 @@ interface MenuListInputProps {
 
 export default class MenuListInput extends Component {
   props: MenuListInputProps;
-  state = {
-    inputValue: "",
-  };
 
   constructor(
     targetSelector: string,
@@ -46,6 +43,12 @@ export default class MenuListInput extends Component {
       </button>
     </div>
   </form>`;
+  }
+
+  initState() {
+    this.state = {
+      inputValue: "",
+    };
   }
 
   initListenerInfos() {

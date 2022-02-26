@@ -84,6 +84,8 @@ export class Component {
         // 불변성 유지
         this.state = { ...this.state, ...state };
 
+        console.log(this.state, "setState");
+
         this.beforeUpdated();
         // state 변경 후 업데이트 반영
         this.updated();
@@ -93,7 +95,7 @@ export class Component {
     }
   }
 
-  setProps(props: object | null) {
+  setProps(props: Props | null) {
     if (props === null) return;
 
     this.props = props;
@@ -159,6 +161,7 @@ export class Component {
   // 완벽히 구현하려면 ... 나중에 virtual dom 추가해서 구현해보기
   updated() {
     this.targetElement = document.querySelector(this.targetSelector);
+    this.initComponentSpecs();
     this.render();
     this.setEventListeners();
     this.setComponentInstances();
@@ -167,13 +170,14 @@ export class Component {
     if (!this.componentInstances.length) return;
 
     this.componentInstances.forEach((componentInstance) => {
-      const component = this.componentSpecs.find((componentSpec) => {
+      const componentSpec = this.componentSpecs.find((componentSpec) => {
         return componentInstance.constructor === componentSpec.constructor;
       });
 
-      if (!component) return;
+      if (!componentSpec) return;
 
-      componentInstance.setProps(component.props);
+      console.log(componentSpec.props, "component props");
+      componentInstance.setProps(componentSpec.props);
       componentInstance.updated();
     });
   }

@@ -16,6 +16,7 @@ export default class MenuList extends Component {
     props: MenuListProps
   ) {
     super(targetSelector, store, props);
+    this.state = store.state;
 
     this.props = props;
   }
@@ -41,6 +42,7 @@ export default class MenuList extends Component {
   }
 
   getMenuListItems() {
+    console.log(this.props, "props");
     const { menu } = this.props;
 
     return menu.map(
