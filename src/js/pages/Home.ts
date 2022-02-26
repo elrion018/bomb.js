@@ -1,18 +1,20 @@
-import { Component, ComponentProps, ComponentSpec } from "../cores/Component";
+import { Component, Props } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
 import { EspressoMenuStore, EspressoMenuStoreState } from "../flux/stores";
 
 interface HomeState extends EspressoMenuStoreState {}
 
-export default class Home extends Component {
+interface HomeProps extends Props {}
+
+export class Home extends Component {
   state: HomeState;
   store: EspressoMenuStore;
 
   constructor(
     targetSelector: string,
     store: EspressoMenuStore,
-    props: ComponentProps
+    props: HomeProps
   ) {
     super(targetSelector, store, props);
     this.store = store;
@@ -23,8 +25,8 @@ export default class Home extends Component {
     return `<div class="d-flex justify-center mt-5 w-100">
     <div class="w-100">
       <header class="my-4">
-        <a href="/" class="text-black">
-          <h1 class="text-center font-bold">🌝 문벅스 메뉴 관리</h1>
+        <a href="#" class="text-black">
+          <h1 class="text-center font-bold">메뉴 관리</h1>
         </a>
         <nav class="d-flex justify-center flex-wrap">
           <button
@@ -78,18 +80,27 @@ export default class Home extends Component {
   </div>`;
   }
 
-  initComponents() {
-    const menuListSpec = {
-      constructor: MenuList,
-      props: {
-        menu: this.state.menu,
-        removeMenu: this.removeMenu.bind(this),
-        editMenu: this.editMenu.bind(this),
+  initComponentSpecs() {
+    this.componentSpecs = [
+      {
+        constructor: MenuList,
+        targetSelector: "#espresso-menu-list-wrapper",
+        props: {
+          menu: this.state.menu,
+          removeMenu: this.removeMenu.bind(this),
+          editMenu: this.editMenu.bind(this),
+        },
       },
-      targetSelector: "#espresso-menu-list-wrapper",
-    };
 
-    this.componentSpecs = [menuListSpec];
+      {
+        constructor: MenuListInput,
+        targetSelector: "#espresso-menu-form-wrapper",
+        props: {
+          menu: this.state.menu,
+          addMenu: this.addMenu.bind(this),
+        },
+      },
+    ];
   }
 
   observeStore() {

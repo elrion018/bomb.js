@@ -1,6 +1,10 @@
 import { Store } from "./";
 
-export interface ComponentProps {
+export interface Props {
+  [key: string]: any;
+}
+
+export interface State {
   [key: string]: any;
 }
 
@@ -13,28 +17,23 @@ interface ListenerSpec {
 export interface ComponentSpec<T extends typeof Component> {
   constructor: T;
   targetSelector: string;
-  props: ComponentProps;
+  props: Props | null;
 }
 
 export class Component {
-  props: ComponentProps | null;
+  props: Props | null;
   store: Store;
-  state: object;
+  state: State;
   listenerInfos: ListenerSpec[];
   targetSelector: string;
   targetElement: HTMLElement | null;
-  componentSpecs: ComponentSpec<typeof Component>[];
+  componentSpecs: ComponentSpec<typeof Component>[] = [];
   componentInstances: Component[];
 
-  constructor(
-    targetSelector: string,
-    store: Store,
-    props: ComponentProps | null
-  ) {
+  constructor(targetSelector: string, store: Store, props: Props | null) {
     this.props = props;
     this.store = store;
-    this.state = store.state;
-    this.componentSpecs = [];
+    this.state = store.getState();
     this.componentInstances = [];
     this.listenerInfos = [];
     this.targetSelector = targetSelector;
@@ -51,7 +50,7 @@ export class Component {
   }
 
   // components들을 init 하는 메소드
-  initComponents() {}
+  initComponentSpecs() {}
 
   // state를 초기화하는 메소드
   initState() {
@@ -61,11 +60,11 @@ export class Component {
     this.state = this.store.getState();
   }
 
-  initComponentInstances() {
+  setComponentInstances() {
     this.componentInstances = this.componentSpecs.map((componentSpec) => {
-      const { constructor, targetSelector, props } = componentSpec;
+      const { constructor: Constructor, targetSelector, props } = componentSpec;
 
-      return new constructor(targetSelector, this.store, props);
+      return new Constructor(targetSelector, this.store, props);
     });
   }
 
@@ -73,7 +72,7 @@ export class Component {
   observeStore() {}
 
   // state에 변화를 주는 메소드
-  setState(this: Component, state: object) {
+  setState(this: Component, state: State) {
     try {
       // state parameter 는 object만 허용
       if (state.constructor !== Object)
@@ -133,13 +132,11 @@ export class Component {
 
   // 기초적인 created 라이프사이클
   created() {
-    // console.log("created ...");
-
     this.observeStore();
     this.initState();
-    this.initComponentInstances();
+    this.initComponentSpecs();
     this.render();
-    // this.setComponentInstances();
+    this.setComponentInstances();
   }
 
   // 기초적인 beforeMounted 라이프사이클
@@ -164,7 +161,7 @@ export class Component {
     this.targetElement = document.querySelector(this.targetSelector);
     this.render();
     this.setEventListeners();
-    this.initComponentInstances();
+    this.setComponentInstances();
 
     // props를 새롭게 갱신하고 인스턴스들에 update를 유발한다.
     if (!this.componentInstances.length) return;
