@@ -6,6 +6,7 @@
 
 - ~~TypeScript 적용~~
 - ~~컴포넌트 별 state 기능 적용~~
-- router 구현하기
+- jsx 적용
 - virtual dom을 이용한 reconcilation 알고리즘 적용
+- router 구현하기
 - 사용하기 쉽도록 API 정리
