@@ -1,4 +1,13 @@
 import { Store } from "./";
+import { h } from "../../../utils";
+
+declare global {
+  interface Window {
+    h: typeof h;
+  }
+}
+
+window.h = h;
 
 export interface Props {
   [key: string]: any;

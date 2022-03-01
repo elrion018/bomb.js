@@ -18,7 +18,7 @@
     "skipLibCheck": true,
     "lib": ["es2017", "dom"],
     "baseUrl": ".",
-    "typeRoots": ["node_modules/@types", "./typings"],
+    "typeRoots": ["node_modules/@types", "./types"],
     "allowJs": true,
     "checkJs": true,
     "forceConsistentCasingInFileNames": true,
@@ -27,6 +27,6 @@
     "isolatedModules": true,
     "incremental": true
   },
-  "include": ["./src/**/*", "types.ts"],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }

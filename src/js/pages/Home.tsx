@@ -1,7 +1,12 @@
+
+/** @jsx h */
+
 import { Component, Props, State } from "../cores/Component";
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
 import { EspressoMenuStore } from "../flux/stores";
+
+import { createElement } from '../../../utils'
 
 export interface Menu {
   name: string;
@@ -29,6 +34,24 @@ export class Home extends Component {
   }
 
   makeTemplate() {
+    createElement(<div id="app">
+    <ul>
+      <li>
+        <input type="checkbox" className="toggle" />
+        todo list item 1
+        <button className="remove">삭제</button>
+      </li>
+      <li className="completed">
+        <input type="checkbox" className="toggle" checked />
+        todo list item 2
+        <button className="remove">삭제</button>
+      </li>
+    </ul>
+    <form>
+      <input type="text" />
+      <button type="submit">추가</button>
+    </form>
+  </div>);
     return `<div class="d-flex justify-center mt-5 w-100">
     <div class="w-100">
       <header class="my-4">

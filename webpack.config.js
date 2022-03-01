@@ -5,7 +5,7 @@ module.exports = {
     filename: "bundle.js",
   },
   resolve: {
-    extensions: [".ts", ".js", "tsx"],
+    extensions: [".ts", ".js", ".tsx"],
   },
   module: {
     rules: [
