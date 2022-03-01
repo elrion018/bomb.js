@@ -4,17 +4,34 @@ module.exports = {
     path: __dirname + "/dist",
     filename: "bundle.js",
   },
+  resolve: {
+    extensions: [".ts", ".js", "tsx"],
+  },
   module: {
     rules: [
       {
-        test: /\.ts$/,
-        use: "ts-loader",
-        exclude: ["/node_modules"],
+        test: /\.(ts|tsx)$/,
+        exclude: ["/node_modules/"],
+        use: [
+          {
+            loader: "babel-loader",
+            options: {
+              presets: [
+                "@babel/preset-env",
+                [
+                  "@babel/preset-typescript",
+                  {
+                    allowDeclareFields: true,
+                  },
+                ],
+              ],
+              plugins: ["@babel/plugin-transform-react-jsx"],
+            },
+          },
+        ],
       },
     ],
   },
-  resolve: {
-    extensions: [".ts", ".js"],
-  },
+
   mode: "development",
 };
