@@ -34,7 +34,7 @@ export class Home extends Component {
   }
 
   makeTemplate() {
-    createElement(<div id="app">
+    const realDom = createElement(<div id="app">
     <ul>
       <li>
         <input type="checkbox" className="toggle" />
@@ -52,6 +52,9 @@ export class Home extends Component {
       <button type="submit">추가</button>
     </form>
   </div>);
+
+  console.log(realDom)
+
     return `<div class="d-flex justify-center mt-5 w-100">
     <div class="w-100">
       <header class="my-4">
