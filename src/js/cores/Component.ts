@@ -1,5 +1,5 @@
 import { Store } from "./";
-import { h } from "../../../utils";
+import { h } from "./virtualDOM";
 
 declare global {
   interface Window {

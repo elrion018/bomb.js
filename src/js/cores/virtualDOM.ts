@@ -2,11 +2,17 @@ interface JsxProps {
   [key: string]: any;
 }
 
+interface VirtualDomObject {
+  type: string;
+  props: JsxProps | null;
+  children: VirtualDomObject[];
+}
+
 export const h = (
   type: string,
   props: JsxProps | null,
-  ...children: JSX.Element[]
-): JSX.Element => {
+  ...children: VirtualDomObject[]
+): VirtualDomObject => {
   return { type, props, children: children.flat() };
 };
 

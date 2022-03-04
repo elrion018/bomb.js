@@ -2,11 +2,12 @@
 /** @jsx h */
 
 import { Component, Props, State } from "../cores/Component";
+import { createElement } from '../cores/virtualDOM'
+
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
 import { EspressoMenuStore } from "../flux/stores";
 
-import { createElement } from '../../../utils'
 
 export interface Menu {
   name: string;
