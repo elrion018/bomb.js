@@ -2,7 +2,7 @@
 /** @jsx h */
 
 import { Component, Props, State } from "../cores/Component";
-import { createElement } from '../cores/virtualDOM'
+import { createElement, updateElement } from '../cores/virtualDOM'
 
 import MenuListInput from "../components/MenuListInput";
 import MenuList from "../components/MenuList";
@@ -35,7 +35,7 @@ export class Home extends Component {
   }
 
   makeTemplate() {
-    const realDom = createElement(<div id="app">
+    const oldNode = <div id="app">
     <ul>
       <li>
         <input type="checkbox" className="toggle" />
@@ -52,9 +52,13 @@ export class Home extends Component {
       <input type="text" />
       <button type="submit">추가</button>
     </form>
-  </div>);
+  </div>
 
-  console.log(realDom)
+  const root = document.createElement('div')
+
+  updateElement(root, oldNode)
+
+  console.log(root)
 
     return `<div class="d-flex justify-center mt-5 w-100">
     <div class="w-100">
