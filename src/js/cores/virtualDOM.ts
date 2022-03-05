@@ -2,32 +2,39 @@ interface JsxProps {
   [key: string]: any;
 }
 
-interface VirtualDomObject {
+interface VirtualDom {
   type: string;
   props: JsxProps | null;
-  children: VirtualDomObject[];
+  children: VirtualDom[];
 }
 
+/**
+ * virtual dom를 만드는 함수. jsx에 적용
+ */
 export const h = (
   type: string,
   props: JsxProps | null,
-  ...children: VirtualDomObject[]
-): VirtualDomObject => {
+  ...children: VirtualDom[]
+): VirtualDom => {
   return { type, props, children: children.flat() };
 };
 
-export const createElement = (node: VirtualDomObject | string) => {
-  if (typeof node === "string") {
-    return document.createTextNode(node);
+/**
+ * virtual dom를 받아 real dom를 만든 함수
+ */
+export const createElement = (virtualDom: VirtualDom | string) => {
+  console.log(virtualDom);
+  if (typeof virtualDom == "string") {
+    return document.createTextNode(virtualDom);
   }
 
-  const element = <HTMLElement>document.createElement(node.type);
+  const element = <HTMLElement>document.createElement(virtualDom.type);
 
-  Object.entries(node.props || {})
+  Object.entries(virtualDom.props || {})
     .filter(([attr, value]) => value)
     .forEach(([attr, value]) => element.setAttribute(attr, value));
 
-  const children = node.children.map(createElement);
+  const children = virtualDom.children.map(createElement);
 
   children.forEach((child) => element.appendChild(child));
 
@@ -39,8 +46,8 @@ export const createElement = (node: VirtualDomObject | string) => {
  */
 export const updateElement = (
   parent: HTMLElement | ChildNode,
-  newNode?: VirtualDomObject,
-  oldNode?: VirtualDomObject,
+  newNode?: VirtualDom,
+  oldNode?: VirtualDom,
   index: number = 0
 ) => {
   if (!newNode && oldNode) return parent.removeChild(parent.childNodes[index]);
@@ -85,6 +92,9 @@ export const updateElement = (
   return;
 };
 
+/**
+ * newNode와 oldNode를 비교하여 바뀐 props가 있으면 반영하는 함수
+ */
 const updateAttributes = (
   target: HTMLElement,
   newProps: JsxProps,
