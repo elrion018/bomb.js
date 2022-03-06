@@ -144,7 +144,6 @@ export class Component {
    * 맨 처음 state에 따라 템플릿을 렌더링하거나 state 변화 이후 템플릿을 재렌더링하는 메소드
    */
   render() {
-    console.log(this.state)
     if (this.targetElement === null) return;
 
     this.clearEventListeners();
