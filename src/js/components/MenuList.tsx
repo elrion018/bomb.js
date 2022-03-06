@@ -1,5 +1,7 @@
-import { Component, Props } from "../cores";
-import { Menu } from "../pages/Home";
+/** @jsx h */
+
+import { Component, Props } from '../cores';
+import { Menu } from '../pages/Home';
 
 interface MenuListProps extends Props {
   menu: Menu[];
@@ -15,10 +17,11 @@ export default class MenuList extends Component {
   }
 
   makeTemplate() {
-    return `<ul id="espresso-menu-list" class="mt-3 pl-0">
-      ${this.getMenuListItems().join("")}
-    
-    </ul>`;
+    return (
+      <ul id="espresso-menu-list" class="mt-3 pl-0">
+        {this.getMenuListItems()}
+      </ul>
+    );
   }
 
   initEventListenerSpecs() {
@@ -26,9 +29,9 @@ export default class MenuList extends Component {
       {
         eventTarget:
           this.targetElement !== null
-            ? this.targetElement.querySelector("#espresso-menu-list")
+            ? this.targetElement.querySelector('#espresso-menu-list')
             : null,
-        eventType: "click",
+        eventType: 'click',
         listener: this.itemButtonClickListener.bind(this),
       },
     ];
@@ -37,10 +40,13 @@ export default class MenuList extends Component {
   getMenuListItems() {
     const { menu } = this.props;
 
-    return menu.map(
-      (item) =>
-        `<li class="espresson-menu-item" data-key="${item.id}">${item.name}<button data-purpose="edit">수정</button> <button data-purpose="delete">삭제</button></li>`
-    );
+    return menu.map(item => (
+      <li class="espresson-menu-item" data-key={item.id}>
+        {item.name}
+        <button data-purpose="edit">수정</button>{' '}
+        <button data-purpose="delete">삭제</button>
+      </li>
+    ));
   }
 
   itemButtonClickListener(event: Event) {
@@ -54,11 +60,11 @@ export default class MenuList extends Component {
     const { key } = parentNode.dataset;
 
     // 동적으로 개선 예정
-    if (purpose === "delete" && key) {
+    if (purpose === 'delete' && key) {
       this.props.removeMenu(key);
     }
 
-    if (purpose === "edit" && key) {
+    if (purpose === 'edit' && key) {
       this.props.editMenu(key);
     }
   }

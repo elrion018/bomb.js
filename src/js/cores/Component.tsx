@@ -1,5 +1,7 @@
-import { Store } from "./";
-import { h } from "./virtualDOM";
+/** @jsx h */
+
+import { Store } from '.';
+import { h, updateElement, VirtualDom } from './virtualDOM';
 
 declare global {
   interface Window {
@@ -33,10 +35,11 @@ export class Component {
   props: Props | null;
   store: Store | null;
   state: State;
+  oldVirtualDom: VirtualDom | null;
   eventListenerSpecs: EventListenerSpec[];
   targetSelector: string;
   targetElement: HTMLElement | null;
-  componentSpecs: ComponentSpec<typeof Component>[] = [];
+  componentSpecs: ComponentSpec<typeof Component>[];
   componentInstances: Component[];
 
   constructor(
@@ -46,6 +49,8 @@ export class Component {
   ) {
     this.props = props;
     this.store = store;
+    this.oldVirtualDom = null;
+    this.componentSpecs = [];
     this.componentInstances = [];
     this.eventListenerSpecs = [];
     this.targetSelector = targetSelector;
@@ -72,6 +77,7 @@ export class Component {
    * state를 setter 메소드
    */
   setState<T extends State>(this: Component, state: T) {
+    console.log(state);
     // 이벤트 큐의 뒤로 밀어버리기 위해 사용
     setTimeout(() => {
       // 불변성 유지
@@ -106,7 +112,7 @@ export class Component {
    * componentSpecs의 정보에 따라 component의 인스턴스들을 set하는 메소드
    */
   setComponentInstances() {
-    this.componentInstances = this.componentSpecs.map((componentSpec) => {
+    this.componentInstances = this.componentSpecs.map(componentSpec => {
       const { constructor: Constructor, targetSelector, props } = componentSpec;
 
       return new Constructor(targetSelector, this.store, props);
@@ -141,9 +147,16 @@ export class Component {
   render() {
     if (this.targetElement === null) return;
 
-    this.targetElement.innerHTML = this.makeTemplate();
+    this.clearEventListeners();
+
+    const newVirtualDom = this.makeTemplate();
+    this.oldVirtualDom === null
+      ? updateElement(this.targetElement, newVirtualDom)
+      : updateElement(this.targetElement, newVirtualDom, this.oldVirtualDom);
+    this.oldVirtualDom = newVirtualDom;
 
     this.initEventListenerSpecs();
+    this.addEventListeners();
   }
 
   /**
@@ -174,20 +187,18 @@ export class Component {
   beforeUpdated() {}
 
   /**
-   * @todo virtual dom 구현할 것
    * updated 라이프사이클. 자신의 템플릿을 리렌더링하고 자식 컴포넌트들을 리렌더링시킨다.
    */
   updated() {
     this.targetElement = document.querySelector(this.targetSelector);
     this.initComponentSpecs();
     this.render();
-    this.addEventListeners();
 
     // props를 새롭게 갱신하고 인스턴스들에 update를 유발한다.
     if (!this.componentInstances.length) return;
 
-    this.componentInstances.forEach((componentInstance) => {
-      const componentSpec = this.componentSpecs.find((componentSpec) => {
+    this.componentInstances.forEach(componentInstance => {
+      const componentSpec = this.componentSpecs.find(componentSpec => {
         return componentInstance.constructor === componentSpec.constructor;
       });
 
@@ -202,6 +213,6 @@ export class Component {
    * 컴포넌트의 템플릿을 만든 메소드
    */
   makeTemplate() {
-    return ``;
+    return <div></div>;
   }
 }

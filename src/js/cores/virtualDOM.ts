@@ -2,7 +2,7 @@ interface JsxProps {
   [key: string]: any;
 }
 
-interface VirtualDom {
+export interface VirtualDom {
   type: string;
   props: JsxProps | null;
   children: VirtualDom[];
@@ -23,8 +23,7 @@ export const h = (
  * virtual dom를 받아 real dom를 만든 함수
  */
 export const createElement = (virtualDom: VirtualDom | string) => {
-  console.log(virtualDom);
-  if (typeof virtualDom == "string") {
+  if (typeof virtualDom == 'string') {
     return document.createTextNode(virtualDom);
   }
 
@@ -36,7 +35,7 @@ export const createElement = (virtualDom: VirtualDom | string) => {
 
   const children = virtualDom.children.map(createElement);
 
-  children.forEach((child) => element.appendChild(child));
+  children.forEach(child => element.appendChild(child));
 
   return element;
 };
@@ -54,7 +53,7 @@ export const updateElement = (
 
   if (newNode && !oldNode) return parent.appendChild(createElement(newNode));
 
-  if (typeof newNode === "string" && typeof oldNode === "string") {
+  if (typeof newNode === 'string' && typeof oldNode === 'string') {
     if (newNode === oldNode) return;
 
     return parent.replaceChild(
@@ -102,6 +101,8 @@ const updateAttributes = (
 ) => {
   for (const [attr, value] of Object.entries(newProps)) {
     if (newProps[attr] === oldProps[attr]) continue;
+
+    console.log(newProps[attr], oldProps[attr]);
 
     target.setAttribute(attr, value);
   }
