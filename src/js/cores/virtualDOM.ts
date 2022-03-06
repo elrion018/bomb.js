@@ -103,8 +103,9 @@ const updateAttributes = (
   for (const [attr, value] of Object.entries(newProps)) {
     if (newProps[attr] === oldProps[attr]) continue;
 
-    if (attr === "value") target.value = value;
-    else target.setAttribute(attr, value);
+    target.setAttribute(attr, value);
+
+    if (target.tagName === "INPUT") (target as HTMLInputElement).value = value;
   }
 
   for (const attr of Object.keys(oldProps)) {
