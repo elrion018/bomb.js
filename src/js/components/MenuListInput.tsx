@@ -43,7 +43,7 @@ export default class MenuListInput extends Component {
 
   initState() {
     this.state = {
-      inputValue: '',
+      inputValue: "",
     };
   }
 
@@ -73,7 +73,6 @@ export default class MenuListInput extends Component {
   inputValueChangeListener(event: Event) {
     if (!(event.target instanceof HTMLInputElement)) return;
 
-    console.log('call1');
 
     this.setState({
       ...this.state,
@@ -84,17 +83,16 @@ export default class MenuListInput extends Component {
   formSubmitListener(this: MenuListInput, event: Event) {
     event.preventDefault();
 
-    console.log('call2');
-
     /**
      * @todo form submit을 위한 비동기 메소드 하나 만들 것.
      */
     setTimeout(() => {
-      this.props.addMenu(this.state.inputValue);
-
       this.setState({
+        ...this.state,
         inputValue: '',
       });
+
+      this.props.addMenu(this.state.inputValue);
     }, 0);
   }
 }

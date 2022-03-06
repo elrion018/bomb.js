@@ -16,7 +16,7 @@ interface HomeState extends State {
   menuId: number;
 }
 
-interface HomeProps extends Props {}
+interface HomeProps extends Props { }
 
 export class Home extends Component {
   declare state: HomeState;
@@ -157,7 +157,9 @@ export class Home extends Component {
 
     const newName = prompt('메뉴명을 수정하세요.');
 
-    if (newName === null || newName.trim() === '')
+    if (newName === null) return
+
+    if (newName.trim() === '')
       return alert('빈 값으로 수정할 수 없습니다.');
 
     const copiedMenu = [...this.state.menu];

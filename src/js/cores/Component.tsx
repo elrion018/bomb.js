@@ -64,7 +64,7 @@ export class Component {
   /**
    * state를 초기화하는 메소드
    */
-  initState() {}
+  initState() { }
 
   /**
    * state의 getter 메소드
@@ -77,7 +77,6 @@ export class Component {
    * state를 setter 메소드
    */
   setState<T extends State>(this: Component, state: T) {
-    console.log(state);
     // 이벤트 큐의 뒤로 밀어버리기 위해 사용
     setTimeout(() => {
       // 불변성 유지
@@ -101,12 +100,12 @@ export class Component {
   /**
    * eventListenerSpecs를 초기화하는 메소드
    */
-  initEventListenerSpecs() {}
+  initEventListenerSpecs() { }
 
   /**
    *  componentSpecs를 초기화하는 메소드
    */
-  initComponentSpecs() {}
+  initComponentSpecs() { }
 
   /**
    * componentSpecs의 정보에 따라 component의 인스턴스들을 set하는 메소드
@@ -145,11 +144,13 @@ export class Component {
    * 맨 처음 state에 따라 템플릿을 렌더링하거나 state 변화 이후 템플릿을 재렌더링하는 메소드
    */
   render() {
+    console.log(this.state)
     if (this.targetElement === null) return;
 
     this.clearEventListeners();
 
     const newVirtualDom = this.makeTemplate();
+
     this.oldVirtualDom === null
       ? updateElement(this.targetElement, newVirtualDom)
       : updateElement(this.targetElement, newVirtualDom, this.oldVirtualDom);
@@ -179,12 +180,12 @@ export class Component {
   /**
    * mounted 라이프사이클
    */
-  mounted() {}
+  mounted() { }
 
   /**
    * beforeUpdated 라이프사이클
    */
-  beforeUpdated() {}
+  beforeUpdated() { }
 
   /**
    * updated 라이프사이클. 자신의 템플릿을 리렌더링하고 자식 컴포넌트들을 리렌더링시킨다.

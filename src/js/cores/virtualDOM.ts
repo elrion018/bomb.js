@@ -23,19 +23,19 @@ export const h = (
  * virtual dom를 받아 real dom를 만든 함수
  */
 export const createElement = (virtualDom: VirtualDom | string) => {
-  if (typeof virtualDom == 'string') {
+  if (typeof virtualDom == "string") {
     return document.createTextNode(virtualDom);
   }
 
   const element = <HTMLElement>document.createElement(virtualDom.type);
 
   Object.entries(virtualDom.props || {})
-    .filter(([attr, value]) => value)
+    .filter(([attr, value]) => value || value === "" || value === 0)
     .forEach(([attr, value]) => element.setAttribute(attr, value));
 
   const children = virtualDom.children.map(createElement);
 
-  children.forEach(child => element.appendChild(child));
+  children.forEach((child) => element.appendChild(child));
 
   return element;
 };
@@ -53,7 +53,7 @@ export const updateElement = (
 
   if (newNode && !oldNode) return parent.appendChild(createElement(newNode));
 
-  if (typeof newNode === 'string' && typeof oldNode === 'string') {
+  if (typeof newNode === "string" && typeof oldNode === "string") {
     if (newNode === oldNode) return;
 
     return parent.replaceChild(
@@ -67,15 +67,16 @@ export const updateElement = (
   if (newNode.type !== oldNode.type) {
     return parent.replaceChild(
       createElement(newNode),
+
       parent.childNodes[index]
     );
+  } else {
+    updateAttributes(
+      parent.childNodes[index] as HTMLElement,
+      newNode.props || {},
+      oldNode.props || {}
+    );
   }
-
-  updateAttributes(
-    parent.childNodes[index] as HTMLElement,
-    newNode.props || {},
-    oldNode.props || {}
-  );
 
   const maxLength = Math.max(newNode.children.length, oldNode.children.length);
 
@@ -102,9 +103,8 @@ const updateAttributes = (
   for (const [attr, value] of Object.entries(newProps)) {
     if (newProps[attr] === oldProps[attr]) continue;
 
-    console.log(newProps[attr], oldProps[attr]);
-
-    target.setAttribute(attr, value);
+    if (attr === "value") target.value = value;
+    else target.setAttribute(attr, value);
   }
 
   for (const attr of Object.keys(oldProps)) {
