@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { Component, Props } from '../cores';
+import { Component, Props, Router } from '../cores';
 import { Menu } from '../pages/Home';
 
 interface MenuListProps extends Props {
@@ -9,11 +9,11 @@ interface MenuListProps extends Props {
   editMenu: (key: string) => void;
 }
 
-export default class MenuList extends Component {
+export class MenuList extends Component {
   declare props: MenuListProps;
 
-  constructor(targetSelector: string, store: null, props: MenuListProps) {
-    super(targetSelector, store, props);
+  constructor(targetSelector: string, store: null, router: Router | null, props: MenuListProps) {
+    super(targetSelector, store, router, props);
   }
 
   makeTemplate() {

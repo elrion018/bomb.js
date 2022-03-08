@@ -2,9 +2,9 @@
 
 import { Component, Props, State } from '../cores/Component';
 
-import MenuListInput from '../components/MenuListInput';
-import MenuList from '../components/MenuList';
+import { MenuList, MenuListInput } from '../components';
 import { EspressoMenuStore } from '../flux/stores';
+import { Router } from '../cores';
 
 export interface Menu {
   name: string;
@@ -25,9 +25,10 @@ export class Home extends Component {
   constructor(
     targetSelector: string,
     store: EspressoMenuStore,
+    router: Router | null,
     props: HomeProps
   ) {
-    super(targetSelector, store, props);
+    super(targetSelector, store, router, props);
     this.store = store;
   }
 

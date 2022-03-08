@@ -1,6 +1,7 @@
 /** @jsx h */
 
-import { Store } from '.';
+import { Store } from './';
+import { Router } from './Router';
 import { h, updateElement, VirtualDom } from './virtualDOM';
 
 declare global {
@@ -32,12 +33,13 @@ export interface ComponentSpec<T extends typeof Component> {
 }
 
 export class Component {
-  props: Props | null;
+  targetSelector: string;
   store: Store | null;
+  router: Router | null
+  props: Props | null;
   state: State;
   oldVirtualDom: VirtualDom | null;
   eventListenerSpecs: EventListenerSpec[];
-  targetSelector: string;
   targetElement: HTMLElement | null;
   componentSpecs: ComponentSpec<typeof Component>[];
   componentInstances: Component[];
@@ -45,16 +47,18 @@ export class Component {
   constructor(
     targetSelector: string,
     store: Store | null,
+    router: Router | null,
     props: Props | null
   ) {
-    this.props = props;
+    this.targetSelector = targetSelector;
+    this.targetElement = document.querySelector(targetSelector);
     this.store = store;
+    this.router = router
+    this.props = props;
     this.oldVirtualDom = null;
     this.componentSpecs = [];
     this.componentInstances = [];
     this.eventListenerSpecs = [];
-    this.targetSelector = targetSelector;
-    this.targetElement = document.querySelector(targetSelector);
 
     this.created();
     this.beforeMounted();
@@ -114,7 +118,7 @@ export class Component {
     this.componentInstances = this.componentSpecs.map(componentSpec => {
       const { constructor: Constructor, targetSelector, props } = componentSpec;
 
-      return new Constructor(targetSelector, this.store, props);
+      return new Constructor(targetSelector, this.store, this.router, props);
     });
   }
 

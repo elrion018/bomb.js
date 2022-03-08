@@ -36,7 +36,7 @@ export class Router {
    */
   loadRoute(route: string) {
     if (this.routes.hasOwnProperty(route))
-      new this.routes[route](this.targetSelector, null, null);
+      new this.routes[route](this.targetSelector, null, this, null);
   }
 
   /**

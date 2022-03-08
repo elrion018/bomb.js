@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { Component, Props, State } from '../cores';
+import { Component, Props, State, Router } from '../cores';
 import { Menu } from '../pages/Home';
 
 interface MenuListInputProps extends Props {
@@ -12,12 +12,12 @@ interface MenuListInputState extends State {
   inputValue: string;
 }
 
-export default class MenuListInput extends Component {
+export class MenuListInput extends Component {
   declare state: MenuListInputState;
   declare props: MenuListInputProps;
 
-  constructor(targetSelector: string, store: null, props: MenuListInputProps) {
-    super(targetSelector, store, props);
+  constructor(targetSelector: string, store: null, router: Router | null, props: MenuListInputProps) {
+    super(targetSelector, store, router, props);
   }
 
   makeTemplate() {
