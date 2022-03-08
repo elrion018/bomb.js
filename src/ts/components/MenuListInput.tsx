@@ -48,8 +48,6 @@ export class MenuListInput extends Component {
   }
 
   initEventListenerSpecs() {
-    super.initEventListenerSpecs();
-
     this.eventListenerSpecs = [
       {
         eventTarget:

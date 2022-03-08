@@ -11,22 +11,22 @@ export interface Menu {
   id: number;
 }
 
-interface HomeState extends State {
+interface FrappuccinoState extends State {
   menu: Menu[];
   menuId: number;
 }
 
-interface HomeProps extends Props { }
+interface FrappuccinoProps extends Props { }
 
-export class Home extends Component {
-  declare state: HomeState;
+export class Frappuccino extends Component {
+  declare state: FrappuccinoState;
   store: EspressoMenuStore;
 
   constructor(
     targetSelector: string,
     store: EspressoMenuStore,
     router: Router | null,
-    props: HomeProps
+    props: FrappuccinoProps
   ) {
     super(targetSelector, store, router, props);
     this.store = store;
@@ -37,7 +37,7 @@ export class Home extends Component {
           <main class="mt-10 d-flex justify-center">
             <div class="wrapper bg-white p-10">
               <div class="heading d-flex justify-between">
-                <h2 class="mt-1">☕ 에스프레소 메뉴 관리</h2>
+                <h2 class="mt-1">☕ 프라푸치노 메뉴 관리</h2>
               </div>
               <div id="espresso-menu-form-wrapper"></div>
               <div id="espresso-menu-list-wrapper"></div>
@@ -64,7 +64,6 @@ export class Home extends Component {
           editMenu: this.editMenu.bind(this),
         },
       },
-
       {
         constructor: MenuListInput,
         targetSelector: '#espresso-menu-form-wrapper',
@@ -83,7 +82,7 @@ export class Home extends Component {
       return;
     }
 
-    this.setState<HomeState>({
+    this.setState<FrappuccinoState>({
       ...this.state,
       menu: this.state.menu.concat({ name: newMenu, id: this.state.menuId }),
       menuId: this.state.menuId + 1,
@@ -101,7 +100,7 @@ export class Home extends Component {
 
     copiedMenu.splice(targetMenuIndex, 1);
 
-    this.setState<HomeState>({
+    this.setState<FrappuccinoState>({
       ...this.state,
       menu: copiedMenu,
     });
@@ -125,7 +124,7 @@ export class Home extends Component {
 
     copiedMenu[targetMenuIndex].name = newName.toLocaleLowerCase();
 
-    this.setState<HomeState>({
+    this.setState<FrappuccinoState>({
       ...this.state,
       menu: copiedMenu,
     });

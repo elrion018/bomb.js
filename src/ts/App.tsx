@@ -2,7 +2,6 @@
 
 import { Component } from './cores';
 import { Header } from './components'
-import { Home } from './pages';
 
 export default class App extends Component {
   makeTemplate() {
@@ -18,11 +17,11 @@ export default class App extends Component {
   initComponentSpecs() {
     this.componentSpecs = [
       { constructor: Header, targetSelector: "#header", props: null },
-      {
-        constructor: Home,
-        targetSelector: '#home',
-        props: null,
-      },
     ];
+  }
+
+  mounted() {
+    this.router?.setTarget("#main")
+    this.router?.replaceRoute('Home')
   }
 }

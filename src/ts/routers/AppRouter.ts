@@ -1,10 +1,11 @@
 import { Router } from "../cores";
-import { Home } from "../pages";
+import { Home, Frappuccino } from "../pages";
 
 export class AppRouter extends Router {
   initRoutes() {
     this.routes = {
       Home,
+      Frappuccino,
     };
   }
 }

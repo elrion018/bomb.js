@@ -1,8 +1,7 @@
 import App from "./App";
-import { EspressoMenuStore } from "./flux/stores";
-import { EspressoMenuReducer } from "./flux/reducers";
+import { AppRouter } from "./routers";
 
 const appSelector = "#app";
-const espressoMenuStore = new EspressoMenuStore(new EspressoMenuReducer());
+const appRouter = new AppRouter();
 
-new App(appSelector, espressoMenuStore, null);
+new App(appSelector, null, appRouter, null);
