@@ -80,16 +80,18 @@ export class Component {
   /**
    * state를 setter 메소드
    */
-  setState<T extends State>(this: Component, state: T) {
+  async setState<T extends State>(this: Component, state: T) {
+
     // 이벤트 큐의 뒤로 밀어버리기 위해 사용
-    setTimeout(() => {
+    return new Promise((resolve, reject) => {
       // 불변성 유지
       this.state = { ...this.state, ...state };
 
       this.beforeUpdated();
       // state 변경 후 업데이트 반영
       this.updated();
-    }, 0);
+      resolve(undefined)
+    })
   }
 
   /**
