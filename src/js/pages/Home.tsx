@@ -1,6 +1,7 @@
 /** @jsx h */
 
-import { Component, Props, State } from '../cores';
+import { Component } from '../cores';
+import { Props, State } from '../cores/Component';
 
 import MenuListInput from '../components/MenuListInput';
 import MenuList from '../components/MenuList';
@@ -16,7 +17,7 @@ interface HomeState extends State {
   menuId: number;
 }
 
-interface HomeProps extends Props { }
+interface HomeProps extends Props {}
 
 export class Home extends Component {
   declare state: HomeState;
@@ -135,7 +136,7 @@ export class Home extends Component {
     if (!confirm('정말 삭제하시겠습니까?')) return;
 
     const targetMenuIndex = this.state.menu.findIndex(
-      item => item.id === Number(key)
+      (item) => item.id === Number(key)
     );
 
     const copiedMenu = [...this.state.menu];
@@ -150,17 +151,16 @@ export class Home extends Component {
 
   editMenu(key: string) {
     const targetMenuIndex = this.state.menu.findIndex(
-      item => item.id === Number(key)
+      (item) => item.id === Number(key)
     );
 
     if (targetMenuIndex === -1) return;
 
     const newName = prompt('메뉴명을 수정하세요.');
 
-    if (newName === null) return
+    if (newName === null) return;
 
-    if (newName.trim() === '')
-      return alert('빈 값으로 수정할 수 없습니다.');
+    if (newName.trim() === '') return alert('빈 값으로 수정할 수 없습니다.');
 
     const copiedMenu = [...this.state.menu];
 
