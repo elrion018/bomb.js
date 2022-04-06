@@ -1,7 +1,9 @@
+var HtmlWebpackPlugin = require("html-webpack-plugin");
+
 module.exports = {
-  entry: ["./src/js/index.ts"],
+  entry: ["./src/index.ts"],
   output: {
-    path: __dirname + "/dist",
+    path: __dirname + "/public",
     filename: "bundle.js",
   },
   resolve: {
@@ -25,13 +27,26 @@ module.exports = {
                   },
                 ],
               ],
-              plugins: ["@babel/plugin-transform-react-jsx"],
+              plugins: [
+                "@babel/plugin-transform-react-jsx",
+                "@babel/plugin-transform-runtime",
+              ],
             },
           },
         ],
       },
     ],
   },
+
+  devServer: {
+    port: 9000,
+  },
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "index.html",
+    }),
+  ],
 
   mode: "development",
 };

@@ -24,7 +24,6 @@
     "forceConsistentCasingInFileNames": true,
     "strictPropertyInitialization": false,
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "incremental": true
   },
   "include": ["./src/**/*"],
