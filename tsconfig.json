@@ -16,7 +16,7 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "skipLibCheck": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2019", "dom"],
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types", "./types"],
     "allowJs": true,

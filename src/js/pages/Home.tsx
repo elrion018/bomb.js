@@ -1,6 +1,6 @@
 /** @jsx h */
 
-import { Component, Props, State } from '../cores/Component';
+import { Component, Props, State } from '../cores';
 
 import MenuListInput from '../components/MenuListInput';
 import MenuList from '../components/MenuList';

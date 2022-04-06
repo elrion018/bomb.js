@@ -1,3 +1,6 @@
-export * from "./Component";
-export * from "./Store";
-export * from "./Reducer";
+import Component from './Component';
+import Router from './Router';
+import Store from './Store';
+import Reducer from './Reducer';
+
+export { Component, Router, Store, Reducer };

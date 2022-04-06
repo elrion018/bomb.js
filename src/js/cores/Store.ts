@@ -1,4 +1,4 @@
-import { Reducer, Component } from "./";
+import { Reducer, Component } from './';
 
 interface SubscriberSpec {
   subscriber: Component;
@@ -14,11 +14,11 @@ export interface StoreState {
   [key: string]: any;
 }
 
-export class Store {
-  prevState: StoreState;
+export default class Store {
+  private prevState: StoreState;
+  private subscribers: SubscriberSpec[];
+  private reducer: Reducer;
   state: StoreState;
-  subscribers: SubscriberSpec[];
-  reducer: Reducer;
 
   constructor(reducer: Reducer) {
     this.prevState = {};
@@ -32,62 +32,56 @@ export class Store {
     this.subscribers.push({ subscriber, subscribingStates });
   }
 
-  removeDestroyedSubscribers(destoryedSubscribers: SubscriberSpec[]) {
-    const newSubscribers = this.subscribers.filter((subscriber) => {
-      return !destoryedSubscribers.some((destoryedSubscriber) => {
-        return Object.is(destoryedSubscriber, subscriber);
-      });
-    });
-
-    this.subscribers = newSubscribers;
+  clearSubscribers() {
+    this.subscribers = [];
   }
 
   // action을 받아 상태변경을 리듀서에 요청하는 메소드
   // 변경 후 변경 사항을 notify 한다.
   dispatch(action: Action) {
-    this.prevState = this.state;
-    this.state = this.reducer.reduce(this.state, action);
+    setTimeout(async () => {
+      this.prevState = this.state;
+      this.state = await this.reducer.reduce(this.state, action);
 
-    // 기존 상태들과 새로운 상태들을 비교해서 바뀐 상태 값을 확인
-    const changedStates = Object.entries(this.state).filter(([key, value]) => {
-      return Object.entries(this.prevState).some(([prevKey, prevValue]) => {
-        return Object.is(prevKey, key) && !Object.is(prevValue, value);
-      });
+      // 기존 상태들과 새로운 상태들을 비교해서 바뀐 상태 값을 확인
+      const changedStates = Object.entries(this.state).filter(
+        ([key, value]) => {
+          return Object.entries(this.prevState).some(([prevKey, prevValue]) => {
+            return Object.is(prevKey, key) && !Object.is(prevValue, value);
+          });
+        }
+      );
+
+      this.notifyChanges(changedStates);
     });
-
-    this.notifyChanges(changedStates);
   }
 
   // state 변경사항을 알리는 메소드
   notifyChanges(changedStates: [string, any][]) {
     this.subscribers.forEach(({ subscriber, subscribingStates }) => {
-      const isSubscribingStateChanged = changedStates.some(
-        ([stateKey, stateValue]) => {
-          return subscribingStates.includes(stateKey);
-        }
-      );
+      const isSubscribingStateChanged = changedStates.some(([key, value]) => {
+        return subscribingStates.includes(key);
+      });
 
-      if (isSubscribingStateChanged) subscriber.setState(this.state);
+      if (isSubscribingStateChanged) subscriber['updated']();
     });
-  }
-
-  // state getter 메소드
-  getState() {
-    return { ...this.state };
-  }
-
-  // subscriber getter 메소드
-  getSubcriber() {
-    return [...this.subscribers];
   }
 
   // data setter 메소드
   setState(state: object) {
-    this.state = state;
-  }
+    setTimeout(() => {
+      this.prevState = this.state;
+      this.state = { ...state };
 
-  // subscriber setter 메소드
-  setSubscribers(subscribers: SubscriberSpec[]) {
-    this.subscribers = subscribers;
+      const changedStates = Object.entries(this.state).filter(
+        ([key, value]) => {
+          return Object.entries(this.prevState).some(([prevKey, prevValue]) => {
+            return Object.is(prevKey, key) && !Object.is(prevValue, value);
+          });
+        }
+      );
+
+      this.notifyChanges(changedStates);
+    });
   }
 }

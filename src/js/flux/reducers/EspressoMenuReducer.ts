@@ -1,3 +1,3 @@
-import { Reducer } from "../../cores/Reducer";
+import { Reducer } from "../../cores";
 
 export class EspressoMenuReducer extends Reducer {}
